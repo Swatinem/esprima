@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -42,14 +43,15 @@ data = {
                 expression: {
                     type: 'ThisExpression',
                     range: [0, 3]
-                }
+                },
+                range: [0, 4]
             }],
+            range: [0, 4],
             tokens: [{
                 type: 'Keyword',
                 value: 'this',
                 range: [0, 3]
-            }],
-            range: [0, 5]
+            }]
         },
 
         '\n    42\n\n': {
@@ -60,14 +62,15 @@ data = {
                     type: 'Literal',
                     value: 42,
                     range: [5, 6]
-                }
+                },
+                range: [5, 8]
             }],
+            range: [5, 8],
             tokens: [{
                 type: 'Numeric',
                 value: '42',
                 range: [5, 6]
-            }],
-            range: [0, 9]
+            }]
         },
 
         '(1 + 2 ) * 3': {
@@ -96,7 +99,8 @@ data = {
                     range: [11, 11]
                 },
                 range: [0, 11]
-            }
+            },
+            range: [0, 11]
         }
     },
 
@@ -120,8 +124,10 @@ data = {
                         range: [4, 5]
                     },
                     range: [0, 5]
-                }
+                },
+                range: [0, 5]
             }],
+            range: [0, 5],
             tokens: [{
                 type: 'Identifier',
                 value: 'x',
@@ -138,8 +144,7 @@ data = {
                 type: 'Punctuator',
                 value: ']',
                 range: [5, 5]
-            }],
-            range: [0, 6]
+            }]
         },
 
         'x = [ ]': {
@@ -197,7 +202,8 @@ data = {
                     range: [4, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x = [ ,, 42 ]': {
@@ -1407,6 +1413,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -1417,8 +1424,10 @@ data = {
                         range: [8, 15]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [0, 15]
             }],
+            range: [0, 15],
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
@@ -1435,8 +1444,7 @@ data = {
                 type: 'RegularExpression',
                 value: '/[a-z]/i',
                 range: [8, 15]
-            }],
-            range: [0, 16]
+            }]
         },
 
         'var x = /[P QR]/i': {
@@ -1444,6 +1452,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -1454,8 +1463,10 @@ data = {
                         range: [8, 16]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [0, 16]
             }],
+            range: [0, 16],
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
@@ -1472,8 +1483,7 @@ data = {
                 type: 'RegularExpression',
                 value: '/[P QR]/i',
                 range: [8, 16]
-            }],
-            range: [0, 17]
+            }]
         },
 
         'var x = /foo\\/bar/': {
@@ -1481,6 +1491,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -1491,8 +1502,10 @@ data = {
                         range: [8, 17]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [0, 17]
             }],
+            range: [0, 17],
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
@@ -1509,8 +1522,7 @@ data = {
                 type: 'RegularExpression',
                 value: '/foo\\/bar/',
                 range: [8, 17]
-            }],
-            range: [0, 18]
+            }]
         },
 
         'var x = /=([^=\\s])+/g': {
@@ -1518,6 +1530,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -1528,8 +1541,10 @@ data = {
                         range: [8, 20]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [0, 20]
             }],
+            range: [0, 20],
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
@@ -1546,8 +1561,7 @@ data = {
                 type: 'RegularExpression',
                 value: '/=([^=\\s])+/g',
                 range: [8, 20]
-            }],
-            range: [0, 21]
+            }]
         }
     },
 
@@ -1609,6 +1623,51 @@ data = {
             }
         },
 
+        'new foo().bar()': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'NewExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'foo'
+                        },
+                        'arguments': []
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'bar'
+                    }
+                },
+                'arguments': []
+            }
+        },
+
+        'new foo.bar()': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'foo'
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'bar'
+                    }
+                },
+                'arguments': []
+            }
+        },
+
+
         'foo(bar, baz)': {
             type: 'ExpressionStatement',
             expression: {
@@ -1643,7 +1702,8 @@ data = {
                     range: [9, 16]
                 },
                 range: [0, 16]
-            }
+            },
+            range: [0, 16]
         },
 
         'universe.milkyway.solarsystem': {
@@ -1672,7 +1732,8 @@ data = {
                     range: [18, 28]
                 },
                 range: [0, 28]
-            }
+            },
+            range: [0, 28]
         },
 
         'universe.milkyway.solarsystem.Earth': {
@@ -1711,7 +1772,8 @@ data = {
                     range: [30, 34]
                 },
                 range: [0, 34]
-            }
+            },
+            range: [0, 34]
         },
 
         'universe[galaxyName, otherUselessName]': {
@@ -1738,7 +1800,8 @@ data = {
                     range: [9, 36]
                 },
                 range: [0, 37]
-            }
+            },
+            range: [0, 37]
         },
 
         'universe[galaxyName]': {
@@ -1757,7 +1820,8 @@ data = {
                     range: [9, 18]
                 },
                 range: [0, 19]
-            }
+            },
+            range: [0, 19]
         },
 
         'universe[42].galaxies': {
@@ -1786,7 +1850,8 @@ data = {
                     range: [13, 20]
                 },
                 range: [0, 20]
-            }
+            },
+            range: [0, 20]
         },
 
         'universe(42).galaxies': {
@@ -1911,7 +1976,8 @@ data = {
                     range: [9, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'universe.true': {
@@ -1930,7 +1996,8 @@ data = {
                     range: [9, 12]
                 },
                 range: [0, 12]
-            }
+            },
+            range: [0, 12]
         },
 
         'universe.false': {
@@ -1949,7 +2016,8 @@ data = {
                     range: [9, 13]
                 },
                 range: [0, 13]
-            }
+            },
+            range: [0, 13]
         },
 
         'universe.null': {
@@ -1968,7 +2036,8 @@ data = {
                     range: [9, 12]
                 },
                 range: [0, 12]
-            }
+            },
+            range: [0, 12]
         }
     },
 
@@ -1986,7 +2055,8 @@ data = {
                 },
                 prefix: false,
                 range: [0, 2]
-            }
+            },
+            range: [0, 2]
         },
 
         'x--': {
@@ -2001,7 +2071,8 @@ data = {
                 },
                 prefix: false,
                 range: [0, 2]
-            }
+            },
+            range: [0, 2]
         }
     },
 
@@ -2019,7 +2090,8 @@ data = {
                 },
                 prefix: true,
                 range: [0, 2]
-            }
+            },
+            range: [0, 2]
         },
 
         '--x': {
@@ -2034,7 +2106,8 @@ data = {
                 },
                 prefix: true,
                 range: [0, 2]
-            }
+            },
+            range: [0, 2]
         },
 
         '+x': {
@@ -2048,7 +2121,8 @@ data = {
                     range: [1, 1]
                 },
                 range: [0, 1]
-            }
+            },
+            range: [0, 1]
         },
 
         '-x': {
@@ -2062,7 +2136,8 @@ data = {
                     range: [1, 1]
                 },
                 range: [0, 1]
-            }
+            },
+            range: [0, 1]
         },
 
         '~x': {
@@ -2076,7 +2151,8 @@ data = {
                     range: [1, 1]
                 },
                 range: [0, 1]
-            }
+            },
+            range: [0, 1]
         },
 
         '!x': {
@@ -2090,7 +2166,8 @@ data = {
                     range: [1, 1]
                 },
                 range: [0, 1]
-            }
+            },
+            range: [0, 1]
         },
 
         'void x': {
@@ -2104,7 +2181,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'delete x': {
@@ -2118,7 +2196,8 @@ data = {
                     range: [7, 7]
                 },
                 range: [0, 7]
-            }
+            },
+            range: [0, 7]
         },
 
         'typeof x': {
@@ -2132,7 +2211,8 @@ data = {
                     range: [7, 7]
                 },
                 range: [0, 7]
-            }
+            },
+            range: [0, 7]
         }
     },
 
@@ -2154,7 +2234,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x / y': {
@@ -2173,7 +2254,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x % y': {
@@ -2192,7 +2274,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         }
     },
 
@@ -2214,7 +2297,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x - y': {
@@ -2233,7 +2317,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         }
     },
 
@@ -2255,7 +2340,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x >> y': {
@@ -2274,7 +2360,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x >>> y': {
@@ -2293,7 +2380,8 @@ data = {
                     range: [6, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         }
     },
 
@@ -2315,7 +2403,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x > y': {
@@ -2334,7 +2423,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x <= y': {
@@ -2353,7 +2443,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x >= y': {
@@ -2372,7 +2463,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x in y': {
@@ -2391,7 +2483,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x instanceof y': {
@@ -2410,7 +2503,8 @@ data = {
                     range: [13, 13]
                 },
                 range: [0, 13]
-            }
+            },
+            range: [0, 13]
         }
     },
 
@@ -2432,7 +2526,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x != y': {
@@ -2451,7 +2546,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x === y': {
@@ -2470,7 +2566,8 @@ data = {
                     range: [6, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x !== y': {
@@ -2489,7 +2586,8 @@ data = {
                     range: [6, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         }
     },
 
@@ -2511,7 +2609,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x ^ y': {
@@ -2530,7 +2629,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x | y': {
@@ -2549,7 +2649,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         }
     },
 
@@ -2581,7 +2682,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x - y + z': {
@@ -2610,7 +2712,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x + y - z': {
@@ -2639,7 +2742,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x - y - z': {
@@ -2668,7 +2772,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x + y * z': {
@@ -2697,7 +2802,8 @@ data = {
                     range: [4, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x + y / z': {
@@ -2726,7 +2832,8 @@ data = {
                     range: [4, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x - y % z': {
@@ -2755,7 +2862,8 @@ data = {
                     range: [4, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x * y * z': {
@@ -2784,7 +2892,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x * y / z': {
@@ -2813,7 +2922,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x * y % z': {
@@ -2842,7 +2952,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x % y * z': {
@@ -2871,7 +2982,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x << y << z': {
@@ -2900,7 +3012,8 @@ data = {
                     range: [10, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x | y | z': {
@@ -2929,7 +3042,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x & y & z': {
@@ -2958,7 +3072,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x ^ y ^ z': {
@@ -2987,7 +3102,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x & y | z': {
@@ -3016,7 +3132,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x | y ^ z': {
@@ -3045,7 +3162,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x | y & z': {
@@ -3074,7 +3192,8 @@ data = {
                     range: [4, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         }
     },
 
@@ -3096,7 +3215,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x && y': {
@@ -3115,7 +3235,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x || y || z': {
@@ -3144,7 +3265,8 @@ data = {
                     range: [10, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x && y && z': {
@@ -3173,7 +3295,8 @@ data = {
                     range: [10, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x || y && z': {
@@ -3202,7 +3325,8 @@ data = {
                     range: [5, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x || y ^ z': {
@@ -3231,7 +3355,8 @@ data = {
                     range: [5, 9]
                 },
                 range: [0, 9]
-            }
+            },
+            range: [0, 9]
         }
     },
 
@@ -3257,7 +3382,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x && y ? 1 : 2': {
@@ -3290,7 +3416,8 @@ data = {
                     range: [13, 13]
                 },
                 range: [0, 13]
-            }
+            },
+            range: [0, 13]
         }
     },
 
@@ -3312,7 +3439,8 @@ data = {
                     range: [4, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x *= 42': {
@@ -3331,7 +3459,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x /= 42': {
@@ -3350,7 +3479,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x %= 42': {
@@ -3369,7 +3499,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x += 42': {
@@ -3388,7 +3519,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x -= 42': {
@@ -3407,7 +3539,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x <<= 42': {
@@ -3426,7 +3559,8 @@ data = {
                     range: [6, 7]
                 },
                 range: [0, 7]
-            }
+            },
+            range: [0, 7]
         },
 
         'x >>= 42': {
@@ -3445,7 +3579,8 @@ data = {
                     range: [6, 7]
                 },
                 range: [0, 7]
-            }
+            },
+            range: [0, 7]
         },
 
         'x >>>= 42': {
@@ -3464,7 +3599,8 @@ data = {
                     range: [7, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x &= 42': {
@@ -3483,7 +3619,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x ^= 42': {
@@ -3502,7 +3639,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x |= 42': {
@@ -3521,7 +3659,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         }
     },
 
@@ -3574,6 +3713,7 @@ data = {
         'var x': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3586,12 +3726,14 @@ data = {
         'var x, y;': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
                 },
                 init: null
             }, {
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'y'
@@ -3604,6 +3746,7 @@ data = {
         'var x = 42': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3619,6 +3762,7 @@ data = {
         'var x = 14, y = 3, z = 1977': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3628,6 +3772,7 @@ data = {
                     value: 14
                 }
             }, {
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'y'
@@ -3637,6 +3782,7 @@ data = {
                     value: 3
                 }
             }, {
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'z'
@@ -3656,6 +3802,7 @@ data = {
         'let x': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3670,6 +3817,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3685,6 +3833,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3703,6 +3852,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3712,6 +3862,7 @@ data = {
                         value: 14
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'y'
@@ -3721,6 +3872,7 @@ data = {
                         value: 3
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'z'
@@ -3740,6 +3892,7 @@ data = {
         'const x = 42': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3757,6 +3910,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3775,6 +3929,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3784,6 +3939,7 @@ data = {
                         value: 14
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'y'
@@ -3793,6 +3949,7 @@ data = {
                         value: 3
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'z'
@@ -3842,7 +3999,8 @@ data = {
                     }
                 ],
                 range: [0, 3]
-            }
+            },
+            range: [0, 3]
         }
 
     },
@@ -3899,6 +4057,7 @@ data = {
             consequent: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4137,6 +4296,7 @@ data = {
             init: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4160,6 +4320,7 @@ data = {
             init: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4183,6 +4344,7 @@ data = {
             init: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4192,6 +4354,7 @@ data = {
                         value: 0
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'y'
@@ -4286,8 +4449,10 @@ data = {
                 range: [19, 21]
             },
             body: {
-                type: 'EmptyStatement'
-            }
+                type: 'EmptyStatement',
+                range: [23, 23]
+            },
+            range: [0, 23]
         },
 
         'for(x = 0; x < 42; x++) process(x);': {
@@ -4346,9 +4511,12 @@ data = {
                         type: 'Identifier',
                         name: 'x',
                         range: [32, 32]
-                    }]
-                }
-            }
+                    }],
+                    range: [24, 33]
+                },
+                range: [24, 34]
+            },
+            range: [0, 34]
         },
 
         'for(x in list) process(x);': {
@@ -4383,6 +4551,7 @@ data = {
             left: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4412,11 +4581,50 @@ data = {
             each: false
         },
 
+        'for (var x = 42 in list) process(x);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }],
+                kind: 'var'
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list'
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process'
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x'
+                    }]
+                }
+            },
+            each: false
+        },
+
         'for (let x in list) process(x);': {
             type: 'ForInStatement',
             left: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4444,8 +4652,102 @@ data = {
                 }
             },
             each: false
-        }
+        },
 
+        'for (let x = 42 in list) process(x);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }],
+                kind: 'let'
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list'
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process'
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x'
+                    }]
+                }
+            },
+            each: false
+        },
+
+        'for (var i = function() { return 10 in [] } in list) process(x);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'i'
+                    },
+                    init: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [{
+                                type: 'ReturnStatement',
+                                'argument': {
+                                    type: 'BinaryExpression',
+                                    operator: 'in',
+                                    left: {
+                                        type: 'Literal',
+                                        value: 10
+                                    },
+                                    right: {
+                                        type: 'ArrayExpression',
+                                        elements: []
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                }],
+                kind: 'var'
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list'
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process'
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x'
+                    }]
+                }
+            },
+            each: false
+        }
     },
 
     'continue statement': {
@@ -4534,7 +4836,8 @@ data = {
                     range: [11, 11]
                 },
                 range: [7, 11]
-            }
+            },
+            range: [0, 11]
         }
 
     },
@@ -4564,8 +4867,10 @@ data = {
                         range: [15, 17]
                     },
                     range: [9, 17]
-                }
-            }
+                },
+                range: [9, 17]
+            },
+            range: [0, 17]
         },
 
         'with (x) foo = bar;': {
@@ -4591,8 +4896,10 @@ data = {
                         range: [15, 17]
                     },
                     range: [9, 17]
-                }
-            }
+                },
+                range: [9, 18]
+            },
+            range: [0, 18]
         },
 
         'with (x) { foo = bar }': {
@@ -4620,9 +4927,12 @@ data = {
                             range: [17, 19]
                         },
                         range: [11, 19]
-                    }
-                }]
-            }
+                    },
+                    range: [11, 20]
+                }],
+                range: [9, 21]
+            },
+            range: [0, 21]
         }
 
     },
@@ -4777,7 +5087,8 @@ data = {
                     range: [10, 10]
                 },
                 range: [6, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'throw { message: "Error" }': {
@@ -5080,6 +5391,7 @@ data = {
         'var hi = function() { sayHi() };': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'hi'
@@ -5110,6 +5422,7 @@ data = {
         'var hello = function hi() { sayHi() };': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'hello'
@@ -5151,7 +5464,8 @@ data = {
                     body: []
                 },
                 range: [0, 13]
-            }
+            },
+            range: [0, 13]
         }
     },
 
@@ -5206,6 +5520,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -5215,6 +5530,7 @@ data = {
                         value: 14
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'y'
@@ -5493,6 +5809,8 @@ data = {
 
         'for (var i, i2 in {});': 'Line 1: Unexpected token in',
 
+        'for ((i in {}));': 'Line 1: Unexpected token )',
+
         'try { }': 'Line 1: Missing catch or finally after try',
 
         '\u203F = 10': 'Line 1: Unexpected token ILLEGAL',
@@ -5565,6 +5883,10 @@ NotMatchingError.prototype = new Error();
 function testParse(code, syntax) {
     'use strict';
     var expected, tree, actual, options;
+    var expected, tree, actual, options, StringObject;
+
+    // alias, so that JSLint does not complain.
+    StringObject = String;
 
     options = {
         comment: false,
@@ -5581,6 +5903,10 @@ function testParse(code, syntax) {
         tree = esprima.parse(code, options);
         tree = (options.comment || options.tokens) ? tree : tree.body[0];
         actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+
+        // Only to ensure that there is no error when using string object.
+        esprima.parse(new StringObject(code), options);
+
     } catch (e) {
         throw new NotMatchingError(expected, e.toString());
     }
@@ -5758,6 +6084,7 @@ if (typeof window !== 'undefined') {
             });
         }
         console.log(header);
+        process.exit(failures.length === 0 ? 0 : 1);
     }());
 }
 /* vim: set sw=4 ts=4 et tw=80 : */
